@@ -13,7 +13,6 @@ int main()
 
 	debugFill(I);
 
-	I.changeAddress("20231231654", "CHUJ");
 	I.displayRecords();
 	I.sortByEarnings();
 	I.deleteByPESEL("83018503020");
