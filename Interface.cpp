@@ -141,7 +141,6 @@ void Interface::exportToFile(char * dir){
 	file.close();
 }
 
-//TO DO! (modify old)
 void Interface::importFromFile(char * dir){
 	std::ifstream file(dir);
 	if (!file.is_open())
