@@ -24,7 +24,6 @@ int main()
     result = I.checkPesel("8301231295"); //pesel is incorrect
     std::cout << "Pesel is valid: " << std::boolalpha<<result<<std::endl;
 
-    I.deleteByPESEL("83018503020");
     I.displayRecords();
     I.findBySurname("Kowalewicz");
 	
