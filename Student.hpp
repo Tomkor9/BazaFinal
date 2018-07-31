@@ -11,10 +11,11 @@ public:
 	void setIndex(int index) { index_ = index; }
 
 	void show();
+	char getAlias() { return alias_; };
 	
 	Student(std::string name = "", std::string surname = "",
-		std::string PESEL = "00000000000", std::string gender = "",
-		std::string address = "", int index = 0000);
+		std::string Pesel = "00000000000", std::string gender = "",
+		int index = 0000, std::string address = "");
 
 	//bad solution (virtual base class method restriction)
 	float getSalary() { return -1.0F; }
