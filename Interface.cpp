@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <fstream>
 
 /* UNIVERSAL METHODS */
 
@@ -9,9 +10,9 @@ void Interface::addNewPerson(std::unique_ptr<Person> person){
 	database_.push_back(std::move(person));
 }
 
-void Interface::deleteByPESEL(std::string PESEL) {
+void Interface::deleteByPesel(std::string Pesel) {
 		for (size_t i = 0; i < database_.size(); i++)
-			if (database_.at(i)->getPESEL() == PESEL)
+			if (database_.at(i)->getPesel() == Pesel)
 				database_.erase(database_.begin() + i);
 }
 
@@ -24,12 +25,12 @@ int Interface::findBySurname(std::string surname){
 	return -1;    //-1 means: no index found
 }
 
-int Interface::findByPESEL(std::string PESEL){
+int Interface::findByPesel(std::string Pesel){
 	for (size_t i = 0; i < database_.size(); i++)
-		if (database_.at(i)->getPESEL() == PESEL) {
+		if (database_.at(i)->getPesel() == Pesel) {
 			database_.at(i)->show();
 			return i;
-		}         //prints result and outputs PESEL
+		}         //prints result and outputs Pesel
 	return -1;    //-1 means: no index found
 }
 
@@ -41,11 +42,11 @@ void Interface::sortByName(){
 	});
 }
 
-void Interface::sortByPESEL(){
+void Interface::sortByPesel(){
 	if (!database_.empty())
 		sort(database_.begin(), database_.end(),
 			[](const std::unique_ptr<Person>& p1, const std::unique_ptr<Person>& p2) {
-		return  p1->getPESEL() < p2->getPESEL();
+		return  p1->getPesel() < p2->getPesel();
 	});
 }
 
@@ -60,79 +61,118 @@ void Interface::displayRecords() {
 	}
 }
 
-bool Interface::changeAddress(std::string PESEL, std::string address){
+bool Interface::changeAddress(std::string Pesel, std::string address){
 	for (size_t i = 0; i < database_.size(); i++)
-		if (database_.at(i)->getPESEL() == PESEL) {
+		if (database_.at(i)->getPesel() == Pesel) {
 			database_.at(i)->setAddress(address);
 			return true;
 		}        
 	return false;    
 }
 
-bool Interface::checkPesel(std::string pesel) {
+bool Interface::checkPesel(std::string Pesel){
+	std::vector<int> vect_Pesel;
 
-    std::vector<int> vect_pesel;
+	for (size_t i = 0; i < Pesel.size(); ++i)
+		vect_Pesel.push_back(Pesel[i] - '0');
 
-    for (int i = 0; i < pesel.size(); ++i) {
-      vect_pesel.push_back(pesel[i] - '0');
-    }
+	// >for testing/debug purpose
+	// for (std::vector<int>::const_iterator i = vect_Pesel.begin(); i != vect_Pesel.end(); ++i)
+	//         std::cout << *i << ' ';
 
-    // for testing/debug purpose
-    // for (std::vector<int>::const_iterator i = vect_pesel.begin(); i != vect_pesel.end(); ++i)
-    //         std::cout << *i << ' ';
+	// calculate sum
+	int sum;
+	sum = vect_Pesel[0] * 1 +
+		vect_Pesel[1] * 3 +
+		vect_Pesel[2] * 7 +
+		vect_Pesel[3] * 9 +
+		vect_Pesel[4] * 1 +
+		vect_Pesel[5] * 3 +
+		vect_Pesel[6] * 7 +
+		vect_Pesel[7] * 9 +
+		vect_Pesel[8] * 1 +
+		vect_Pesel[9] * 3;
+	sum = (10 - sum % 10) % 10;
 
-    // calculate sum
-    int sum;
-    sum = vect_pesel[0] * 1 +
-          vect_pesel[1] * 3 +
-          vect_pesel[2] * 7 +
-          vect_pesel[3] * 9 +
-          vect_pesel[4] * 1 +
-          vect_pesel[5] * 3 +
-          vect_pesel[6] * 7 +
-          vect_pesel[7] * 9 +
-          vect_pesel[8] * 1 +
-          vect_pesel[9] * 3;
-    sum = (10 - sum % 10) % 10;
-
-
-    // final validation
-    if (vect_pesel.size() != 11)
-        return false;
-    if (sum == vect_pesel[10]) {
-        return true;
-    } else {
-        return false;
-    }
+	// final validation
+	if (vect_Pesel.size() != 11)
+		return false;
+	if (sum == vect_Pesel[10])
+		return true;
+	else
+		return false;
 }
 
-//TO DO! (algorithm!)
-void Interface::mockData(){
+//Generating random data - in progress
+void Interface::mockData(int instances){
+	if (instances <= 100){
+
+		for (int i = 0; i < instances; i++) {
+			if (i % 2) {
+				//student
+			}
+			else {
+				//employee
+			}
+		}
+	}
+	
+}
+
+void Interface::exportToFile(char * dir){
+	std::ofstream file(dir);
+	if (!file.is_open())
+		throw std::runtime_error("unable to open file");
+	
+	if (!database_.empty()) {
+		for (size_t i = 0; i < database_.size(); i++) {
+			if (database_.at(i)->getAlias() == 's') {
+				file << database_.at(i)->getAlias() << " " << database_.at(i)->getName()
+					<< " " << database_.at(i)->getSurname() << " " << database_.at(i)->getPesel()
+					<< " " << database_.at(i)->getGender() << " " << database_.at(i)->getIndex()
+					<< " " << database_.at(i)->getAddress() << " < \n";
+			}
+			else if (database_.at(i)->getAlias() == 'e') {
+				file << database_.at(i)->getAlias() << " " << database_.at(i)->getName()
+					<< " " << database_.at(i)->getSurname() << " " << database_.at(i)->getPesel()
+					<< " " << database_.at(i)->getGender() << " " << database_.at(i)->getSalary()
+					<< " " << database_.at(i)->getAddress() << " < \n";
+			}}}
+	file.close();
 }
 
 //TO DO! (modify old)
-void Interface::exportToFile(char *){
-}
+void Interface::importFromFile(char * dir){
+	std::ifstream file(dir);
+	if (!file.is_open())
+		throw std::runtime_error("unable to open file");
 
-//TO DO! (modify old)
-void Interface::importFromFile(char *){
+	std::vector<std::string> content;
+	{                                                     //scope
+		std::string temp;
+		while (file >> temp)
+			content.push_back(std::move(temp));
+		file.close();
+	}
+	if (content.size() >= 7)                              //smallest possible amount of data to construct object
+		loadContent(content);                             //if the content has been loaded correctly
 }
 
 void debugFill(Interface &I) {
 	std::unique_ptr<Person> s1(new Student("Jack", "Berenz",
-		"83018503020", "male", "Zurawia 7, Wroclaw", 3210));
+		"83018503020", "male", 3210, "Zurawia 7, Wroclaw" ));
 
 	std::unique_ptr<Person> s2(new Student("Annabelle", "Savage",
-		"66674366610", "female", "Minor st. 3, LA ", 6661));
+		"66674366610", "female", 6661, "Minor st. 3, LA "));
 
 	std::unique_ptr<Person> e1(new Employee("Wayne", "Static",
-		"47392040165", "male", "Sandy Roads 13, Joshua Tree", 3800.0F));
+		"47392040165", "male", 3800.0F, "Sandy Roads 13, Joshua Tree" ));
 
 	std::unique_ptr<Person> e2(new Employee("Ben", "Kowalewicz",
-		"16421041288", "male", "Maple st. 65, Ottawa", 6000.0F));
+		"16421041288", "male", 6000.0F, "Maple st. 65, Ottawa" ));
 
 	std::unique_ptr<Person> e3(new Employee("Anna", "Grodzki",
-		"20231231654", "neuter", "Karczewska 29, Otwock", 8000.0F));
+		"20231231654", "neuter", 8000.0F, "Karczewska 29, Otwock"));
 	
 	I.addNewPerson(std::move(e1));
 	I.addNewPerson(std::move(e2));
@@ -151,9 +191,9 @@ void Interface::sortByEarnings(){
 	});
 }
 
-bool Interface::changeEarnings(std::string PESEL, float earnings){
+bool Interface::changeEarnings(std::string Pesel, float earnings){
 	for (size_t i = 0; i < database_.size(); i++)
-		if (database_.at(i)->getPESEL() == PESEL) {
+		if (database_.at(i)->getPesel() == Pesel) {
 			database_.at(i)->setSalary(earnings);
 			return true;
 		}
@@ -179,6 +219,31 @@ void Interface::deleteByIndex(int index){
 
 /* PRIVATE - HIDDEN */
 
-//TO DO! (modify old)
-void Interface::LoadContent(std::vector<std::string>&){
+void Interface::loadContent(std::vector<std::string>& content) {
+	std::string s_temp = "";
+	
+	for (size_t i = 0; i < content.size(); i++) {
+		if (content.at(i) == "s") {
+			std::unique_ptr<Person> s(new Student(content.at(i + 1), content.at(i + 2), content.at(i + 3),
+				content.at(i + 4), std::stoi(content.at(i + 5))));
+			while (content.at(i + 6) != "<") {
+				s_temp += " " + content.at(i + 6);
+				i++;
+			}
+			s->setAddress(s_temp);
+			database_.push_back(std::move(s));
+			s_temp = "";
+		}
+		if (content.at(i) == "e") {
+			std::unique_ptr<Person> e(new Employee(content.at(i + 1), content.at(i + 2), content.at(i + 3),
+				content.at(i + 4), std::stof(content.at(i + 5))));
+			while (content.at(i + 6) != "<") {
+				s_temp += " " + content.at(i + 6);
+				i++;
+			}
+			e->setAddress(s_temp);
+			database_.push_back(std::move(e));
+			s_temp = "";
+		}
+	}
 }
