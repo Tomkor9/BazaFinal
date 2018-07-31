@@ -11,10 +11,11 @@ public:
 	void setSalary(float salary) { salary_ = salary; }
 
 	void show();
+	char getAlias() { return alias_; };
 
 	Employee(std::string name = "", std::string surname = "",
-		std::string PESEL = "00000000000", std::string gender = "", 
-		std::string address = "", float earnings = 0.0F);
+		std::string Pesel = "00000000000", std::string gender = "",
+		float earnings = 0.0F, std::string address = "");
 
 	//bad solution (virtual base class method restriction)
 	int getIndex() { return INT_MAX; }
