@@ -11,27 +11,27 @@ class Interface{
 
 private:
 	std::vector< std::unique_ptr<Person> > database_;
-	void LoadContent(std::vector<std::string>&);
+	void loadContent(std::vector<std::string>&);
 
 public:
 	//universal
 	void addNewPerson( std::unique_ptr<Person> person );
-	void deleteByPESEL(std::string PESEL);
+	void deleteByPesel(std::string Pesel);
 	int findBySurname(std::string surname);
-	int findByPESEL(std::string PESEL);
+	int findByPesel(std::string Pesel);
 	void sortByName();
-	void sortByPESEL();
+	void sortByPesel();
 	void displayRecords();
-	bool changeAddress(std::string PESEL, std::string address);
-    bool checkPesel(std::string PESEL);
-	void mockData();
+	bool changeAddress(std::string Pesel, std::string address);
+	bool checkPesel(std::string Pesel);
+	void mockData(int instances);
 
 	void exportToFile(char *);
 	void importFromFile(char *);
 
 	//employee specyfic
 	void sortByEarnings();
-	bool changeEarnings(std::string PESEL, float ernings);
+	bool changeEarnings(std::string Pesel, float ernings);
 
 	//student specyfic
 	void sortByIndex();
