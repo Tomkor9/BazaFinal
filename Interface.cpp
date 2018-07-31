@@ -69,11 +69,41 @@ bool Interface::changeAddress(std::string PESEL, std::string address){
 	return false;    
 }
 
-//TO DO! (STL functor / algorithm / isalpha)
-bool Interface::checkPESEL(std::string PESEL){
-	if (PESEL.size() != 11)
-		return false;
-	return true;
+bool Interface::checkPesel(std::string pesel) {
+
+    std::vector<int> vect_pesel;
+
+    for (int i = 0; i < pesel.size(); ++i) {
+      vect_pesel.push_back(pesel[i] - '0');
+    }
+
+    // for testing/debug purpose
+    // for (std::vector<int>::const_iterator i = vect_pesel.begin(); i != vect_pesel.end(); ++i)
+    //         std::cout << *i << ' ';
+
+    // calculate sum
+    int sum;
+    sum = vect_pesel[0] * 1 +
+          vect_pesel[1] * 3 +
+          vect_pesel[2] * 7 +
+          vect_pesel[3] * 9 +
+          vect_pesel[4] * 1 +
+          vect_pesel[5] * 3 +
+          vect_pesel[6] * 7 +
+          vect_pesel[7] * 9 +
+          vect_pesel[8] * 1 +
+          vect_pesel[9] * 3;
+    sum = (10 - sum % 10) % 10;
+
+
+    // final validation
+    if (vect_pesel.size() != 11)
+        return false;
+    if (sum == vect_pesel[10]) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 //TO DO! (algorithm!)

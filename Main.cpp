@@ -9,17 +9,26 @@
 
 int main()
 {
-	Interface I;
+    bool result;
+    Interface I;
 
-	debugFill(I);
+    debugFill(I);
 
-	I.displayRecords();
-	I.sortByEarnings();
-	I.deleteByPESEL("83018503020");
-	I.displayRecords();
-	I.findBySurname("Kowalewicz");
+    I.displayRecords();
+    I.sortByEarnings();
+
+    result = I.checkPesel("83012312954"); //pesel is correct
+    std::cout << "Pesel is valid: " << std::boolalpha<<result<<std::endl;
+    result = I.checkPesel("83012312953"); //pesel is incorrect
+    std::cout << "Pesel is valid: " << std::boolalpha<<result<<std::endl;
+    result = I.checkPesel("8301231295"); //pesel is incorrect
+    std::cout << "Pesel is valid: " << std::boolalpha<<result<<std::endl;
+
+    I.deleteByPESEL("83018503020");
+    I.displayRecords();
+    I.findBySurname("Kowalewicz");
 	
-	std::cin.get();
+    std::cin.get();
     return 0;
 }
 

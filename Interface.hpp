@@ -23,7 +23,7 @@ public:
 	void sortByPESEL();
 	void displayRecords();
 	bool changeAddress(std::string PESEL, std::string address);
-	bool checkPESEL(std::string PESEL);
+    bool checkPesel(std::string PESEL);
 	void mockData();
 
 	void exportToFile(char *);
